@@ -1,92 +1,38 @@
 import "@mantine/core/styles.css";
-import "./App.css";
-import classes from "./HeaderMenu.module.css";
+import classes from "./App.module.css";
 
-import { Box, Flex, MantineProvider, Popover } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Box, MantineProvider, SimpleGrid } from "@mantine/core";
+import { DKG } from "./components/dkg/dkg";
+import { Onboarding } from "./components/onboarding/onboarding";
+import { Forecasting } from "./components/forecasting/forecasting";
+import { DigitalTwinAndInfraSelector } from "./components/smartShopping/root";
 
 function App() {
   return (
     <MantineProvider>
-      <Box>
-        <header className={classes.header}>
-          <div className={classes.inner}>
-            <div className={classes.logo}>
-              <img src="./src/assets/logos/clever_icon.png" height="56px" />
-              <img src="./src/assets/logos/clever_text.png" height="56px" />
-            </div>
-            <img src="./src/assets/logos/chipsju.png" height="64px" />
+      <header className={classes.header}>
+        <div className={classes.inner}>
+          <div className={classes.logo}>
+            <img src="./src/assets/logos/clever_icon.png" height="32px" />
+            <img src="./src/assets/logos/clever_text.png" height="32px" />
           </div>
-        </header>
+          <img src="./src/assets/logos/chipsju.png" height="38px" />
+        </div>
+      </header>
 
-        <Box className={classes.dashitem}>
-          <Box className={classes.room1}>
-            Room 1
-            <Box className={classes.serverlist}>
-              <Server workloads={0} name="Server 1" />
-            </Box>
-          </Box>
-          <Box className={classes.room2}>
-            Room 2
-            <Box className={classes.serverlist}>
-              <Server workloads={0} name="Server 2" />
-            </Box>
-          </Box>
+      <SimpleGrid cols={3} spacing="md" className={classes.dash}>
+        <Box className={classes.left}>
+          <DKG />
+          <Onboarding />
         </Box>
-      </Box>
+        <Box className={classes.center}>
+          <DigitalTwinAndInfraSelector />
+        </Box>
+        <Box className={classes.right}>
+          <Forecasting />
+        </Box>
+      </SimpleGrid>
     </MantineProvider>
-  );
-}
-
-function Server(props: { workloads: number; name: string }) {
-  const [opened, { close, open }] = useDisclosure(false);
-
-  return (
-    <Popover
-      width={200}
-      position="bottom"
-      withArrow
-      shadow="md"
-      opened={opened}
-    >
-      <Popover.Target>
-        <Box
-          className={classes.server}
-          onMouseEnter={open}
-          onMouseLeave={close}
-        >
-          <Flex direction="column">
-            <img src="./src/assets/icons/server.svg" width="64px" />
-            {props.name}
-          </Flex>
-          <Box className={classes.workloads}>Workloads: {props.workloads}</Box>
-        </Box>
-      </Popover.Target>
-      <Popover.Dropdown style={{ pointerEvents: "none" }}>
-        <Box className={classes.serverdetails}>
-          <div className={classes.title}>
-            <img
-              style={{ paddingRight: "4px" }}
-              src="./src/assets/icons/pod.svg"
-              width="32px"
-            />{" "}
-            Pods
-          </div>
-          <Flex direction="column">
-            <div>pod1</div> <div>pod2</div> <div>pod3</div>
-          </Flex>
-        </Box>
-        <Box className={classes.serverdetails}>
-          <div className={classes.title}>
-            <img src="./src/assets/icons/alvarium.svg" width="32px" />
-            Annotations
-          </div>
-          <Flex direction="column">
-            <div>pod1</div> <div>pod2</div> <div>pod3</div>
-          </Flex>
-        </Box>
-      </Popover.Dropdown>
-    </Popover>
   );
 }
 

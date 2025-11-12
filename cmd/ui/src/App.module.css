@@ -1,0 +1,45 @@
+.header {
+  height: 64px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 12px;
+  padding-bottom: 24px;
+  background-color: #f0fffd;
+  border-bottom: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.inner {
+  height: 56px;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 64px;
+  padding-right: 64px;
+}
+
+.homepage {
+  dispaly: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash {
+  width: 100vw;
+  justify-content: center;
+  align-items: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 100px;
+  margin-bottom: 40px;
+}
+
+.left {
+}
+
+.right {
+}
+
+.center {
+}

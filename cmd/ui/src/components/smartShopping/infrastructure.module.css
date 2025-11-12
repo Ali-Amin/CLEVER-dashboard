@@ -1,0 +1,85 @@
+.center {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.room1 {
+  border: 1px solid black;
+  width: 100%;
+  background-color: #f0fffd;
+  min-width: 240px;
+}
+
+.room2 {
+  border: 1px solid black;
+  width: 100%;
+  background-color: #f0fffd;
+  min-width: 240px;
+}
+
+.cloud {
+  border: 1px solid black;
+  background-color: #f0fffd;
+}
+
+.serverlist {
+  padding-top: 24px;
+  padding-left: 4px;
+  justify-self: start;
+  gap: 4px;
+  width: 100%;
+}
+.serverlisthorizontal {
+  padding-top: 24px;
+  padding-left: 4px;
+  justify-self: start;
+  gap: 24px;
+  display: flex;
+  flex-direction: row;
+}
+
+.server {
+  margin-bottom: 24px;
+  display: flex;
+  position: relative;
+  margin-left: 24px;
+}
+
+.workloads {
+  padding-left: 24px;
+  align-self: center;
+  padding-bottom: 24px;
+}
+
+.serverdetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  font-weight: bold;
+  align-items: center;
+}
+
+.confidence {
+  z-index: 1;
+  position: absolute;
+  left: -14px;
+  top: -14px;
+  height: 24px;
+  width: 32px;
+  border: 2px solid black;
+  color: white;
+  font-size: 12px;
+}
+
+.alvarium {
+  position: absolute;
+  z-index: 2;
+  left: -26px;
+  top: -26px;
+}

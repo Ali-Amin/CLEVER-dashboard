@@ -1,0 +1,6 @@
+.graph {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+  flex-direction: column;
+  height: 300px;
+  display: flex;
+}

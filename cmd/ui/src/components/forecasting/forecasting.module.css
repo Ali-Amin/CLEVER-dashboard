@@ -1,0 +1,9 @@
+.forecasting {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+  height: 540px;
+  background-color: #f0fffd;
+  justify-self: center;
+  padding-top: 12px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
