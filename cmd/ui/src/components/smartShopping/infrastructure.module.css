@@ -25,9 +25,8 @@
 
 .serverlist {
   padding-top: 24px;
-  padding-left: 4px;
-  justify-self: start;
-  gap: 4px;
+  padding-bottom: 24px;
+  padding-right: 8px;
   width: 100%;
 }
 .serverlisthorizontal {
@@ -40,8 +39,12 @@
 }
 
 .server {
-  margin-bottom: 24px;
   display: flex;
+  position: relative;
+  margin-left: 24px;
+}
+
+.user {
   position: relative;
   margin-left: 24px;
 }
@@ -65,21 +68,34 @@
   align-items: center;
 }
 
+.userconfidence,
 .confidence {
   z-index: 1;
   position: absolute;
-  left: -14px;
+  left: -12px;
   top: -14px;
   height: 24px;
   width: 32px;
   border: 2px solid black;
   color: white;
   font-size: 12px;
+  padding-left: 2px;
 }
 
+.useralvarium,
 .alvarium {
   position: absolute;
   z-index: 2;
   left: -26px;
   top: -26px;
+}
+
+.userconfidence {
+  left: -8px;
+  top: -8px;
+}
+
+.useralvarium {
+  left: -22px;
+  top: -22px;
 }

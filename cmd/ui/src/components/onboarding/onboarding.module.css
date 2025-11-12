@@ -5,8 +5,9 @@
   padding-bottom: 4px;
   padding-left: 24px;
   padding-right: 24px;
+  height: 50%;
   max-height: 400px;
-  min-height: 220px;
+  min-height: 260px;
 }
 
 .securitylogs {
@@ -14,4 +15,8 @@
   word-break: break-all;
   max-width: 100%;
   text-align: left;
+}
+
+.title {
+  font-weight: bold;
 }
