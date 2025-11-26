@@ -1,11 +1,11 @@
 export const getHederaMessage = async (
   lastSequenceNumber: number,
 ): Promise<string> => {
-  const TOPIC_ID = "0.0.7191526";
-  const MIRROR_NODE_BASE_URL = "https://testnet.mirrornode.hedera.com";
+  const TOPIC_ID = "0.0.1033";
+  const MIRROR_NODE_BASE_URL = "http://10.18.1.35:5551";
   try {
     const response = await fetch(
-      `${MIRROR_NODE_BASE_URL}/api/v1/topics/${TOPIC_ID}/messages?limit=1&order=asc&sequencenumber=gt:${lastSequenceNumber}`,
+      `${MIRROR_NODE_BASE_URL}/api/v1/topics/${TOPIC_ID}/messages?limit=1&order=asc&sequencenumber=${lastSequenceNumber}`,
     );
 
     if (!response.ok) {

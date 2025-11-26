@@ -72,14 +72,16 @@
 .confidence {
   z-index: 1;
   position: absolute;
+  align-items: center;
+  justify-content: center;
   left: -12px;
   top: -14px;
   height: 24px;
-  width: 32px;
   border: 2px solid black;
   color: white;
   font-size: 12px;
   padding-left: 2px;
+  padding-right: 2px;
 }
 
 .useralvarium,

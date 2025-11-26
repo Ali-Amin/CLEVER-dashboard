@@ -1,0 +1,38 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "protocol": "http",
+    "port": 30080
+  },
+  "dcf": {
+    "type": "alvarium",
+    "config": {
+      "api": {
+        "host": "10.18.1.100",
+        "protocol": "http",
+        "port": 30085
+      }
+    }
+  },
+  "dlt": {
+    "type": "hedera",
+    "config": {
+      "mirror": {
+        "host": "10.18.1.35",
+        "protocol": "http",
+        "port": 5551
+      },
+      "topics": ["0.0.1033"]
+    }
+  },
+  "dkg": {
+    "api": {
+      "host": "10.18.1.100",
+      "protocol": "http",
+      "port": 30094
+    }
+  },
+  "forecasting": {
+    "stream": {}
+  }
+}

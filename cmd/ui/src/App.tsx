@@ -1,13 +1,52 @@
 import "@mantine/core/styles.css";
 import classes from "./App.module.css";
 
-import { Box, MantineProvider, SimpleGrid } from "@mantine/core";
+import { Box, Loader, MantineProvider, SimpleGrid } from "@mantine/core";
 import { DKG } from "./components/dkg/dkg";
 import { Onboarding } from "./components/onboarding/onboarding";
 import { Forecasting } from "./components/forecasting/forecasting";
 import { DigitalTwinAndInfraSelector } from "./components/smartShopping/root";
+import { useEffect, useRef, useState } from "react";
+import type { Server } from "./api/dkg/dkg";
 
 function App() {
+  const socketRef = useRef<any>(null);
+  const [dltData, setDltData] = useState<string[]>([]);
+  const [infraData, setInfraData] = useState<Map<string, Server[]>>();
+
+  const [loading, setLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const socket = new WebSocket("ws://172.19.205.208:30080");
+
+    socket.addEventListener("message", (event) => {
+      console.log("message received");
+      setLoading(false);
+      const d = JSON.parse(event.data);
+
+      if (d.dlt.length !== dltData.length) {
+        console.log(d.dlt.length, dltData.length);
+        setDltData(d.dlt);
+      } else {
+        for (var i = 0; i < d.dlt.length; i++) {
+          if (d.dlt[i] !== dltData[i]) {
+            console.log(d.dlt[i], dltData[i]);
+            setDltData(d.dlt);
+            break;
+          }
+        }
+      }
+
+      if (d.infra !== infraData) {
+        setInfraData(d.infra);
+      }
+    });
+    socketRef.current = socket;
+
+    return () => {
+      socket.close();
+    };
+  }, [dltData, infraData]);
+
   return (
     <MantineProvider>
       <header className={classes.header}>
@@ -20,18 +59,22 @@ function App() {
         </div>
       </header>
 
-      <SimpleGrid cols={3} spacing="md" className={classes.dash}>
-        <Box className={classes.left}>
-          <DKG />
-          <Onboarding />
-        </Box>
-        <Box className={classes.center}>
-          <DigitalTwinAndInfraSelector />
-        </Box>
-        <Box className={classes.right}>
-          <Forecasting />
-        </Box>
-      </SimpleGrid>
+      {loading || infraData === undefined ? (
+        <Loader />
+      ) : (
+        <SimpleGrid cols={3} spacing="md" className={classes.dash}>
+          <Box className={classes.left}>
+            <DKG />
+            <Onboarding messages={dltData} />
+          </Box>
+          <Box className={classes.center}>
+            <DigitalTwinAndInfraSelector infra={infraData} />
+          </Box>
+          <Box className={classes.right}>
+            <Forecasting />
+          </Box>
+        </SimpleGrid>
+      )}
     </MantineProvider>
   );
 }
