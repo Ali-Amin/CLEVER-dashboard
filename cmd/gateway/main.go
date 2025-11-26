@@ -11,6 +11,7 @@ import (
 	"clever.eu/dashboard/internal/bootstrap"
 	"clever.eu/dashboard/internal/config"
 	"clever.eu/dashboard/internal/dkg"
+	"clever.eu/dashboard/internal/forecasting"
 	"clever.eu/dashboard/internal/gateway"
 	"clever.eu/dashboard/pkg/factories"
 )
@@ -59,10 +60,12 @@ func main() {
 
 	dkgClient := dkg.NewCleverDKGClient(cfg.DKG, logger)
 
-	gw := gateway.NewGatewayHTTPServer(cfg, logger, dltClient, dcfClient, dkgClient)
+	forecaster := forecasting.NewForecasting(cfg.Forecasting, logger)
+	gw := gateway.NewGatewayHTTPServer(cfg, logger, dltClient, dcfClient, dkgClient, forecaster)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	bootstrap.Run(ctx, cancel, []bootstrap.BootstrapHandler{
+		forecaster.Bootstrap,
 		gw.Bootstrap,
 	})
 }

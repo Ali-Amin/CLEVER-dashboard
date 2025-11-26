@@ -51,7 +51,6 @@ func (c *CleverDKGClient) GetInfrastructure() (contracts.Infrastructure, error) 
 		infra[cluster.ID] = servers
 	}
 
-	fmt.Printf("%+v", infra)
 	return infra, nil
 }
 

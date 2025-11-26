@@ -3,11 +3,15 @@ package contracts
 type (
 	DLTConfigType string
 	DCFConfigType string
+	StreamType    string
 )
 
 const HederaConfigType DLTConfigType = "hedera"
 
-const AlvariumConfigType DCFConfigType = "alvarium"
+const (
+	AlvariumConfigType DCFConfigType = "alvarium"
+	KafkaStream        StreamType    = "kafka"
+)
 
 type Server struct {
 	Name              string   `json:"hostname,omitempty"`
@@ -22,3 +26,12 @@ type Server struct {
 }
 
 type Infrastructure map[string][]Server
+
+type Forecast struct {
+	Pod               string  `json:"pod_name,omitempty"`
+	ForecastTimestamp string  `json:"forecast_timestamp,omitempty"`
+	Timestamp         string  `json:"timestamp,omitempty"`
+	PredictedCPU      float64 `json:"predicted_cpu_usage,omitempty"`
+	ActualCPU         float64 `json:"actual_cpu_usage,omitempty"`
+	Horizon           float64 `json:"target_horizon_sec,omitempty"`
+}

@@ -13,6 +13,13 @@ function App() {
   const socketRef = useRef<any>(null);
   const [dltData, setDltData] = useState<string[]>([]);
   const [infraData, setInfraData] = useState<Map<string, Server[]>>();
+  const [forecastData, setForecastData] =
+    useState<
+      Map<
+        string,
+        { timestamp: string; actual_cpu: number; forecasted_cpu: number }[]
+      >
+    >();
 
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
@@ -39,6 +46,9 @@ function App() {
       if (d.infra !== infraData) {
         setInfraData(d.infra);
       }
+
+      setForecastData(d.forecast);
+      console.log(d.forecast);
     });
     socketRef.current = socket;
 
@@ -71,7 +81,7 @@ function App() {
             <DigitalTwinAndInfraSelector infra={infraData} />
           </Box>
           <Box className={classes.right}>
-            <Forecasting />
+            <Forecasting data={forecastData} />
           </Box>
         </SimpleGrid>
       )}

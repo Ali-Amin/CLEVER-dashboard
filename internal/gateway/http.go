@@ -9,15 +9,17 @@ import (
 
 	"clever.eu/dashboard/internal/config"
 	"clever.eu/dashboard/internal/dkg"
+	"clever.eu/dashboard/internal/forecasting"
 	"clever.eu/dashboard/pkg/interfaces"
 )
 
 type GatewayHTTPServer struct {
-	cfg    config.GatewayConfig
-	logger *slog.Logger
-	dlt    interfaces.DLTClient
-	dcf    interfaces.DCFClient
-	dkg    *dkg.CleverDKGClient
+	cfg        config.GatewayConfig
+	logger     *slog.Logger
+	dlt        interfaces.DLTClient
+	dcf        interfaces.DCFClient
+	dkg        *dkg.CleverDKGClient
+	forecaster *forecasting.Forecasting
 }
 
 func NewGatewayHTTPServer(
@@ -26,8 +28,16 @@ func NewGatewayHTTPServer(
 	dlt interfaces.DLTClient,
 	dcf interfaces.DCFClient,
 	dkg *dkg.CleverDKGClient,
+	forecaster *forecasting.Forecasting,
 ) *GatewayHTTPServer {
-	return &GatewayHTTPServer{cfg: cfg, logger: logger, dlt: dlt, dcf: dcf, dkg: dkg}
+	return &GatewayHTTPServer{
+		cfg:        cfg,
+		logger:     logger,
+		dlt:        dlt,
+		dcf:        dcf,
+		dkg:        dkg,
+		forecaster: forecaster,
+	}
 }
 
 func (s *GatewayHTTPServer) Bootstrap(ctx context.Context, wg *sync.WaitGroup) bool {
@@ -35,7 +45,7 @@ func (s *GatewayHTTPServer) Bootstrap(ctx context.Context, wg *sync.WaitGroup) b
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", s.cfg.Server.Host, s.cfg.Server.Port),
-		Handler: newRouter(s.logger, s.dlt, s.dcf, s.dkg),
+		Handler: newRouter(s.logger, s.dlt, s.dcf, s.dkg, s.forecaster),
 	}
 
 	wg.Add(1)

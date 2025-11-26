@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"clever.eu/dashboard/internal/dkg"
+	"clever.eu/dashboard/internal/forecasting"
 	"clever.eu/dashboard/pkg/interfaces"
 	"github.com/coder/websocket"
 	"github.com/coder/websocket/wsjson"
@@ -24,6 +25,7 @@ func newRouter(
 	dlt interfaces.DLTClient,
 	dcf interfaces.DCFClient,
 	dkg *dkg.CleverDKGClient,
+	forecaster *forecasting.Forecasting,
 ) *chi.Mux {
 	router := &Router{
 		Mux:    chi.NewRouter(),
@@ -93,9 +95,12 @@ func newRouter(
 						}
 					}
 
+					cpu := forecaster.GetReadings()
+
 					data := map[string]interface{}{
-						"dlt":   dltMessages,
-						"infra": infra,
+						"dlt":      dltMessages,
+						"infra":    infra,
+						"forecast": cpu,
 					}
 					err = wsjson.Write(ctx, c, data)
 					if err != nil {

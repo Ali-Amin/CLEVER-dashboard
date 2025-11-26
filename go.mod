@@ -6,7 +6,12 @@ toolchain go1.24.10
 
 require github.com/go-chi/chi v1.5.5
 
-require github.com/coder/websocket v1.8.14
+require (
+	github.com/coder/websocket v1.8.14
+	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3
+)
+
+require github.com/confluentinc/confluent-kafka-go/v2 v2.12.0
 
 require (
 	github.com/btcsuite/btcd/btcec/v2 v2.3.5 // indirect
@@ -22,7 +27,7 @@ require (
 	github.com/rs/zerolog v1.34.0 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	golang.org/x/crypto v0.43.0 // indirect
-	golang.org/x/net v0.45.0 // indirect
+	golang.org/x/net v0.45.0
 	golang.org/x/sys v0.37.0 // indirect
 	golang.org/x/text v0.30.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250804133106-a7a43d27e69b // indirect
