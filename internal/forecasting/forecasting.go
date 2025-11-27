@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"clever.eu/dashboard/internal/config"
-	"clever.eu/dashboard/internal/consumers"
 	"clever.eu/dashboard/pkg/contracts"
+	"clever.eu/dashboard/pkg/factories"
 	"golang.org/x/net/context"
 )
 
@@ -53,11 +53,11 @@ func (f *Forecasting) Bootstrap(ctx context.Context, wg *sync.WaitGroup) bool {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		// TODO: Fix type cast
-		consumer := consumers.NewKafkaConsumer(
-			f.cfg.Stream.Config.(config.KafkaStreamConfig),
-			f.logger,
-		)
+		consumer, err := factories.NewForecastConsumer(f.cfg.Listener, f.logger)
+		if err != nil {
+			f.logger.Error(err.Error())
+			return
+		}
 
 		// We subscribe to new messages that have the forecasted CPU value that is 60
 		// seconds later than the actual CPU in the same message
@@ -70,7 +70,7 @@ func (f *Forecasting) Bootstrap(ctx context.Context, wg *sync.WaitGroup) bool {
 		// P(T=62) - A(T=2) | {forecasted:,timestamp:62} - {actual:,timestamp:2}
 		// ---
 		// P(T=120) - A(T=60) | {forecasted:,timestamp:120} - {actual:,forecasted:,timestamp:60}
-		err := consumer.Subscribe(func(message contracts.Forecast) {
+		err = consumer.SubscribeToForecasts(ctx, func(message contracts.Forecast) {
 			podName := message.Pod
 			data := f.data[podName]
 			sort.Slice(data, func(i, j int) bool {
@@ -95,8 +95,8 @@ func (f *Forecasting) Bootstrap(ctx context.Context, wg *sync.WaitGroup) bool {
 				data.Push(Reading{Timestamp: message.Timestamp, ActualCPU: message.ActualCPU})
 			}
 			f.mx.Lock()
-			defer f.mx.Unlock()
 			f.data[podName] = data
+			f.mx.Unlock()
 		})
 		if err != nil {
 			f.logger.Error(err.Error())

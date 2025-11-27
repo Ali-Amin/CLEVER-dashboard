@@ -41,5 +41,14 @@
         "topics": ["cpu_forecasts"]
       }
     }
+  },
+  "scheduling": {
+    "type": "k8s",
+    "config": {
+      "kubeconfigs": {
+        "cluster1": "/root/dev/CLEVER/cluster1/config",
+        "cluster2": "/root/dev/CLEVER/cluster2/config"
+      }
+    }
   }
 }

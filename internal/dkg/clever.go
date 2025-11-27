@@ -27,6 +27,7 @@ func (c *CleverDKGClient) GetInfrastructure() (contracts.Infrastructure, error) 
 		c.logger.Error(err.Error())
 		return nil, err
 	}
+	defer response.Body.Close()
 
 	body, _ := io.ReadAll(response.Body)
 
@@ -61,6 +62,7 @@ func (c *CleverDKGClient) getServers(cluster string) ([]contracts.Server, error)
 		c.logger.Error(err.Error())
 		return nil, err
 	}
+	defer response.Body.Close()
 
 	body, _ := io.ReadAll(response.Body)
 
@@ -93,6 +95,7 @@ func (c *CleverDKGClient) getPods(cluster string, serverID string) ([]string, er
 		c.logger.Error(err.Error())
 		return nil, err
 	}
+	defer response.Body.Close()
 
 	if response.StatusCode == http.StatusNotFound {
 		return []string{}, nil

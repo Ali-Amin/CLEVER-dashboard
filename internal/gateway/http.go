@@ -10,6 +10,7 @@ import (
 	"clever.eu/dashboard/internal/config"
 	"clever.eu/dashboard/internal/dkg"
 	"clever.eu/dashboard/internal/forecasting"
+	"clever.eu/dashboard/internal/scheduling"
 	"clever.eu/dashboard/pkg/interfaces"
 )
 
@@ -20,6 +21,7 @@ type GatewayHTTPServer struct {
 	dcf        interfaces.DCFClient
 	dkg        *dkg.CleverDKGClient
 	forecaster *forecasting.Forecasting
+	scheduling *scheduling.SchedulingListener
 }
 
 func NewGatewayHTTPServer(
@@ -29,6 +31,7 @@ func NewGatewayHTTPServer(
 	dcf interfaces.DCFClient,
 	dkg *dkg.CleverDKGClient,
 	forecaster *forecasting.Forecasting,
+	scheduling *scheduling.SchedulingListener,
 ) *GatewayHTTPServer {
 	return &GatewayHTTPServer{
 		cfg:        cfg,
@@ -37,6 +40,7 @@ func NewGatewayHTTPServer(
 		dcf:        dcf,
 		dkg:        dkg,
 		forecaster: forecaster,
+		scheduling: scheduling,
 	}
 }
 
@@ -45,7 +49,7 @@ func (s *GatewayHTTPServer) Bootstrap(ctx context.Context, wg *sync.WaitGroup) b
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", s.cfg.Server.Host, s.cfg.Server.Port),
-		Handler: newRouter(s.logger, s.dlt, s.dcf, s.dkg, s.forecaster),
+		Handler: newRouter(s.logger, s.dlt, s.dcf, s.dkg, s.forecaster, s.scheduling),
 	}
 
 	wg.Add(1)

@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"sync"
@@ -9,6 +10,7 @@ import (
 
 	"clever.eu/dashboard/internal/dkg"
 	"clever.eu/dashboard/internal/forecasting"
+	"clever.eu/dashboard/internal/scheduling"
 	"clever.eu/dashboard/pkg/interfaces"
 	"github.com/coder/websocket"
 	"github.com/coder/websocket/wsjson"
@@ -26,6 +28,7 @@ func newRouter(
 	dcf interfaces.DCFClient,
 	dkg *dkg.CleverDKGClient,
 	forecaster *forecasting.Forecasting,
+	scheduling *scheduling.SchedulingListener,
 ) *chi.Mux {
 	router := &Router{
 		Mux:    chi.NewRouter(),
@@ -96,11 +99,14 @@ func newRouter(
 					}
 
 					cpu := forecaster.GetReadings()
+					scheduling := scheduling.GetLogs()
+					logger.Debug(fmt.Sprintf("%v", scheduling))
 
 					data := map[string]interface{}{
-						"dlt":      dltMessages,
-						"infra":    infra,
-						"forecast": cpu,
+						"dlt":        dltMessages,
+						"infra":      infra,
+						"forecast":   cpu,
+						"scheduling": scheduling,
 					}
 					err = wsjson.Write(ctx, c, data)
 					if err != nil {

@@ -1,16 +1,19 @@
 package contracts
 
 type (
-	DLTConfigType string
-	DCFConfigType string
-	StreamType    string
+	DLTConfigType  string
+	DCFConfigType  string
+	ConsumerType   string
+	SchedulingType string
 )
 
 const HederaConfigType DLTConfigType = "hedera"
 
 const (
-	AlvariumConfigType DCFConfigType = "alvarium"
-	KafkaStream        StreamType    = "kafka"
+	AlvariumConfigType     DCFConfigType  = "alvarium"
+	KafkaStream            ConsumerType   = "kafka"
+	ConsumerSchedulingType SchedulingType = "listener"
+	K8sConsumer            ConsumerType   = "k8s"
 )
 
 type Server struct {

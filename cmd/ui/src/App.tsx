@@ -1,9 +1,10 @@
 import "@mantine/core/styles.css";
 import classes from "./App.module.css";
 
-import { Box, Loader, MantineProvider, SimpleGrid } from "@mantine/core";
+import { Box, Flex, Loader, MantineProvider, SimpleGrid } from "@mantine/core";
 import { DKG } from "./components/dkg/dkg";
 import { Onboarding } from "./components/onboarding/onboarding";
+import { Scheduling } from "./components/scheduling/scheduling";
 import { Forecasting } from "./components/forecasting/forecasting";
 import { DigitalTwinAndInfraSelector } from "./components/smartShopping/root";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +12,13 @@ import type { Server } from "./api/dkg/dkg";
 
 function App() {
   const socketRef = useRef<any>(null);
+  const [updatedSchedulingData, setUpdatedSchedulingData] = useState<string[]>(
+    [],
+  );
+  const [updatedDltData, setUpdatedDltData] = useState<string[]>([]);
+  const [updatedInfraData, setUpdatedInfraData] =
+    useState<Map<string, Server[]>>();
+  const [schedulingData, setSchedulingData] = useState<string[]>([]);
   const [dltData, setDltData] = useState<string[]>([]);
   const [infraData, setInfraData] = useState<Map<string, Server[]>>();
   const [forecastData, setForecastData] =
@@ -22,40 +30,60 @@ function App() {
     >();
 
   const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     const socket = new WebSocket("ws://172.19.205.208:30080");
 
+    socket.addEventListener("open", (event) => {
+      console.log("connection opened");
+    });
+    socket.addEventListener("close", (event) => {
+      console.log("connection closed");
+    });
     socket.addEventListener("message", (event) => {
       console.log("message received");
       setLoading(false);
       const d = JSON.parse(event.data);
-
-      if (d.dlt.length !== dltData.length) {
-        console.log(d.dlt.length, dltData.length);
-        setDltData(d.dlt);
-      } else {
-        for (var i = 0; i < d.dlt.length; i++) {
-          if (d.dlt[i] !== dltData[i]) {
-            console.log(d.dlt[i], dltData[i]);
-            setDltData(d.dlt);
-            break;
-          }
-        }
-      }
-
-      if (d.infra !== infraData) {
-        setInfraData(d.infra);
-      }
-
+      setUpdatedDltData(d.dlt);
+      setUpdatedInfraData(d.infra);
+      setUpdatedSchedulingData(d.scheduling);
       setForecastData(d.forecast);
-      console.log(d.forecast);
     });
     socketRef.current = socket;
-
     return () => {
       socket.close();
     };
-  }, [dltData, infraData]);
+  }, []);
+
+  useEffect(() => {
+    if (updatedDltData.length !== dltData.length) {
+      setDltData(updatedDltData);
+    } else {
+      for (var i = 0; i < updatedDltData.length; i++) {
+        if (updatedDltData[i] !== dltData[i]) {
+          console.log(updatedDltData[i], dltData[i]);
+          setDltData(updatedDltData);
+          break;
+        }
+      }
+    }
+
+    if (updatedSchedulingData.length !== schedulingData.length) {
+      setSchedulingData(updatedSchedulingData);
+    } else {
+      for (var i = 0; i < updatedSchedulingData.length; i++) {
+        if (updatedSchedulingData[i] !== schedulingData[i]) {
+          console.log(updatedSchedulingData[i], schedulingData[i]);
+          setSchedulingData(updatedSchedulingData);
+          break;
+        }
+      }
+    }
+
+    if (updatedInfraData !== infraData) {
+      setInfraData(updatedInfraData);
+    }
+  }, [updatedDltData, updatedInfraData, updatedSchedulingData]);
 
   return (
     <MantineProvider>
@@ -70,7 +98,9 @@ function App() {
       </header>
 
       {loading || infraData === undefined ? (
-        <Loader />
+        <Flex w="100vw" h="100vh" align="center" justify="center">
+          <Loader />
+        </Flex>
       ) : (
         <SimpleGrid cols={3} spacing="md" className={classes.dash}>
           <Box className={classes.left}>
@@ -82,6 +112,7 @@ function App() {
           </Box>
           <Box className={classes.right}>
             <Forecasting data={forecastData} />
+            <Scheduling messages={schedulingData} />
           </Box>
         </SimpleGrid>
       )}

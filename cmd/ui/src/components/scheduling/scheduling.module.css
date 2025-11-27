@@ -1,0 +1,22 @@
+.secureonboarding {
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 24px;
+  padding-right: 24px;
+  max-height: 400px;
+  min-height: 260px;
+  overflow-y: auto;
+}
+
+.securitylogs {
+  align-self: start;
+  word-break: break-all;
+  max-width: 100%;
+  text-align: left;
+}
+
+.title {
+  font-weight: bold;
+}

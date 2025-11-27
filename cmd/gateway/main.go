@@ -13,6 +13,7 @@ import (
 	"clever.eu/dashboard/internal/dkg"
 	"clever.eu/dashboard/internal/forecasting"
 	"clever.eu/dashboard/internal/gateway"
+	"clever.eu/dashboard/internal/scheduling"
 	"clever.eu/dashboard/pkg/factories"
 )
 
@@ -60,11 +61,25 @@ func main() {
 
 	dkgClient := dkg.NewCleverDKGClient(cfg.DKG, logger)
 
+	sch := scheduling.NewSchedulingListener(cfg.Scheduling, logger)
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
 	forecaster := forecasting.NewForecasting(cfg.Forecasting, logger)
-	gw := gateway.NewGatewayHTTPServer(cfg, logger, dltClient, dcfClient, dkgClient, forecaster)
+	gw := gateway.NewGatewayHTTPServer(
+		cfg,
+		logger,
+		dltClient,
+		dcfClient,
+		dkgClient,
+		forecaster,
+		sch,
+	)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	bootstrap.Run(ctx, cancel, []bootstrap.BootstrapHandler{
+		sch.Bootstrap,
 		forecaster.Bootstrap,
 		gw.Bootstrap,
 	})

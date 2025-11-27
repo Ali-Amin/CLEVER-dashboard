@@ -1,8 +1,10 @@
 package consumers
 
 import (
+	"context"
 	"encoding/json"
 	"log/slog"
+	"math"
 	"time"
 
 	"clever.eu/dashboard/internal/config"
@@ -11,15 +13,18 @@ import (
 )
 
 type KafkaConsumer struct {
-	cfg    config.KafkaStreamConfig
+	cfg    config.KafkaConsumerConfig
 	logger *slog.Logger
 }
 
-func NewKafkaConsumer(cfg config.KafkaStreamConfig, logger *slog.Logger) *KafkaConsumer {
+func NewKafkaConsumer(cfg config.KafkaConsumerConfig, logger *slog.Logger) *KafkaConsumer {
 	return &KafkaConsumer{cfg: cfg, logger: logger}
 }
 
-func (k *KafkaConsumer) Subscribe(onNewMessage func(contracts.Forecast)) error {
+func (k *KafkaConsumer) SubscribeToForecasts(
+	ctx context.Context,
+	onNewMessage func(contracts.Forecast),
+) error {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": k.cfg.BootstrapServer,
 		"group.id":          k.cfg.GroupID,
@@ -48,9 +53,9 @@ func (k *KafkaConsumer) Subscribe(onNewMessage func(contracts.Forecast)) error {
 			}
 			t = t.Truncate(time.Second)
 			forecast.ForecastTimestamp = t.Format("2006-01-02T15:04:05")
-			forecast.Timestamp = t.Add(time.Minute * -1).Format("2006-01-02T15:04:05")
-			forecast.ActualCPU = forecast.ActualCPU / 1000
-			forecast.PredictedCPU = forecast.PredictedCPU / 1000
+			forecast.Timestamp = t.Add(time.Second * -15).Format("2006-01-02T15:04:05")
+			forecast.ActualCPU = forecast.ActualCPU / 1000000
+			forecast.PredictedCPU = math.Abs(forecast.PredictedCPU / 1000000)
 			onNewMessage(forecast)
 		}
 	}

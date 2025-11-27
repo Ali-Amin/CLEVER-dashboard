@@ -6,4 +6,5 @@ type GatewayConfig struct {
 	DLT         DLTConfig         `json:"dlt,omitempty"`
 	DKG         DKGConfig         `json:"dkg,omitempty"`
 	Forecasting ForecastingConfig `json:"forecasting,omitempty"`
+	Scheduling  ConsumerConfig    `json:"scheduling,omitempty"`
 }
