@@ -46,18 +46,24 @@ func (s *SchedulingListener) Bootstrap(ctx context.Context, wg *sync.WaitGroup) 
 		defer wg.Done()
 		err = consumer.SubscribeToScheduling(ctx, func(cluster, object, message string) {
 			s.mx.Lock()
-			s.logs = append(
-				s.logs,
-				Log{
-					Type:    "global",
-					Message: fmt.Sprintf("Workload '%s' scheduled on '%s'", object, cluster),
-				},
-				Log{
-					Type:    "local",
-					Message: message,
-				},
-			)
-
+			if message == "" { // This is a workaround because I have no time and must record this demo
+				s.logs = append(
+					s.logs,
+					Log{Type: "local", Message: fmt.Sprintf("Killing pod %s", object)},
+				)
+			} else {
+				s.logs = append(
+					s.logs,
+					Log{
+						Type:    "global",
+						Message: fmt.Sprintf("Workload '%s' scheduled on '%s'", object, cluster),
+					},
+					Log{
+						Type:    "local",
+						Message: message,
+					},
+				)
+			}
 			s.mx.Unlock()
 		})
 		if err != nil {

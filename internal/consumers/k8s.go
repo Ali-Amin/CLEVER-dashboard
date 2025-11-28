@@ -80,6 +80,8 @@ func (s *K8sSchedulingEventListener) SubscribeToScheduling(
 								e.InvolvedObject.Name,
 								fmt.Sprintf("%s: %s", time.Now().UTC(), e.Message),
 							)
+						} else if e.Reason == "Killing" {
+							onMessage(cluster, e.InvolvedObject.Name, "")
 						}
 					}
 				case <-time.After(30 * time.Minute):

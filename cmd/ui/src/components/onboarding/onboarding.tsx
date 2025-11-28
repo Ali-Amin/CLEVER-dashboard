@@ -112,44 +112,46 @@ export function Onboarding(props: { messages: string[] }) {
   }, [props.messages]);
 
   return (
-    <Flex
-      className={classes.secureonboarding}
-      align="center"
-      justify="start"
-      direction="column"
-      ref={logsEndRef}
-    >
+    <Box className={classes.mainbox}>
       <Flex align="center" justify="center" gap="8px">
         <Text size="lg" className={classes.title}>
           Onboarding Layer
         </Text>
       </Flex>
-      {loading ? (
-        <Box pt="80px">
-          <Loader />
-        </Box>
-      ) : (
-        logs?.map((log, i) => (
-          <Flex
-            direction="row"
-            align="start"
-            gap="12px"
-            justify="start"
-            pt="12px"
-            w="100%"
-            key={`${i}${log}`}
-          >
-            {log.type == "dcf" ? (
-              <img src="./src/assets/icons/alvarium.png" width="28px" />
-            ) : (
-              <img src="./src/assets/logos/hedera.png" width="28px" />
-            )}
-            <Box key={`${i}:${log}`} className={classes.securitylogs}>
-              <Text lineClamp={2}>{log.log}</Text>
-            </Box>
-          </Flex>
-        ))
-      )}
-    </Flex>
+      <Flex
+        className={classes.secureonboarding}
+        align="center"
+        justify="start"
+        direction="column"
+        ref={logsEndRef}
+      >
+        {loading ? (
+          <Box pt="80px">
+            <Loader />
+          </Box>
+        ) : (
+          logs?.map((log, i) => (
+            <Flex
+              direction="row"
+              align="start"
+              gap="12px"
+              justify="start"
+              pt="12px"
+              w="100%"
+              key={`${i}${log}`}
+            >
+              {log.type == "dcf" ? (
+                <img src="./src/assets/icons/alvarium.png" width="28px" />
+              ) : (
+                <img src="./src/assets/logos/hedera.png" width="28px" />
+              )}
+              <Box key={`${i}:${log}`} className={classes.securitylogs}>
+                <Text lineClamp={2}>{log.log}</Text>
+              </Box>
+            </Flex>
+          ))
+        )}
+      </Flex>
+    </Box>
   );
 }

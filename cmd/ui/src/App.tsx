@@ -98,7 +98,9 @@ function App() {
             <img src="./src/assets/logos/clever_icon.png" height="32px" />
             <img src="./src/assets/logos/clever_text.png" height="32px" />
           </div>
-          <Text size="xl">Smart Shopping</Text>
+          <Text size="32px" fw={700}>
+            Unified Platform for Managing Edge-Cloud Continuum
+          </Text>
           <img src="./src/assets/logos/chipsju.png" height="38px" />
         </div>
       </header>

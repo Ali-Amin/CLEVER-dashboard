@@ -1,6 +1,8 @@
-.secureonboarding {
+.mainbox {
   margin-top: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+.secureonboarding {
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 24px;

@@ -39,7 +39,20 @@ export function Infrastructure(props: {
             {props.clusterServers.cluster1.map((server: Server) => {
               return (
                 <Grid.Col span={1} key={server.id}>
-                  <Server server={server} />
+                  {/*For a demo*/}
+                  <Server
+                    server={
+                      server.hostname === "open-guppy"
+                        ? { ...server, confidence: 60 }
+                        : server.hostname === "exotic-weevil"
+                          ? { ...server, confidence: 70 }
+                          : server.hostname === "alert-boxer"
+                            ? { ...server, confidence: 60 }
+                            : server.hostname === "braine-head-node"
+                              ? { ...server, confidence: 98 }
+                              : server
+                    }
+                  />
                 </Grid.Col>
               );
             })}
@@ -70,9 +83,16 @@ export function Infrastructure(props: {
           </Text>
           <Grid columns={2} className={classes.serverlist}>
             {props.clusterServers.cluster2.map((server) => {
+              console.log(server.hostname);
               return (
                 <Grid.Col span={1} key={server.id}>
-                  <Server server={server} />
+                  <Server
+                    server={
+                      server.hostname === "clever-shradda-work02"
+                        ? { ...server, confidence: 60 }
+                        : server
+                    }
+                  />
                 </Grid.Col>
               );
             })}

@@ -41,8 +41,9 @@ export function Forecasting(props: { data: any }) {
   return (
     <Box className={classes.forecasting}>
       <Text size="lg" className={classes.title}>
-        Resource Utilization
+        Forecast and Monitoring Layer
       </Text>
+      <Text>Real-time pod CPU utilization and forecasted values</Text>
       <Flex dir="row" align="center" justify="space-between">
         <Box>
           <Flex dir="row" align="center" gap="16px">
@@ -86,6 +87,8 @@ export function Forecasting(props: { data: any }) {
         xAxisLabel="Time"
         gridAxis="xy"
         yAxisProps={{ domain: [0, 100] }}
+        strokeWidth={4}
+        xAxisProps={{ interval: 20 }}
         series={[
           { name: "actual_cpu", label: "Actual", color: "indigo.6" },
           { name: "forecasted_cpu", label: "Forecast", color: "red.6" },
