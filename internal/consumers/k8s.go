@@ -78,7 +78,7 @@ func (s *K8sSchedulingEventListener) SubscribeToScheduling(
 							onMessage(
 								cluster,
 								e.InvolvedObject.Name,
-								fmt.Sprintf("%s: %s", e.EventTime.Time.UTC(), e.Message),
+								fmt.Sprintf("%s: %s", time.Now().UTC(), e.Message),
 							)
 						}
 					}

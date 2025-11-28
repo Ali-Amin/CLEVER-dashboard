@@ -30,7 +30,6 @@ export function Scheduling(props: { messages: string[] }) {
     const loadingTimer = setTimeout(() => {
       setLoading(false);
     }, 2000);
-    console.log(props.messages);
     setLogs(props.messages);
 
     return () => {

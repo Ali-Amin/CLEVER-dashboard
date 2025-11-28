@@ -8,11 +8,12 @@ import { type Server } from "../../api/dkg/dkg";
 export function Infrastructure(props: {
   clusterServers: { cluster1: Server[]; cluster2: Server[] };
 }) {
+  console.log(props.clusterServers.cluster2[1]);
   return (
     <Box className={classes.center}>
       <Flex gap="40px">
         <Box className={classes.room1}>
-          <Box className={classes.title}>Room 1</Box>
+          <Box className={classes.title}>Floor 1</Box>
           <Text pt="12px" size="sm" className={classes.title}>
             Users
           </Text>
@@ -24,7 +25,12 @@ export function Infrastructure(props: {
             gap="12px"
           >
             <User name="User 1" confidence={99} />
-            <User name="User 2" confidence={88} />
+            {props.clusterServers.cluster1?.find(
+              (s: Server) =>
+                s.pods?.find((p) => p == "user3-qos") !== undefined,
+            ) ? (
+              <User name="User 3" confidence={88} />
+            ) : undefined}
           </Flex>
           <Text pt="12px" size="sm" className={classes.title}>
             Servers
@@ -40,7 +46,7 @@ export function Infrastructure(props: {
           </Grid>
         </Box>
         <Box className={classes.room2}>
-          <Box className={classes.title}>Room 2</Box>
+          <Box className={classes.title}>Floor 2</Box>
           <Text pt="12px" size="sm" className={classes.title}>
             Users
           </Text>
@@ -51,8 +57,13 @@ export function Infrastructure(props: {
             justify="center"
             gap="12px"
           >
-            <User name="User 3" confidence={66} />
-            <User name="User 4" confidence={50} />
+            <User name="User 2" confidence={66} />
+            {props.clusterServers.cluster2?.find(
+              (s: Server) =>
+                s.pods?.find((p) => p == "user4-qos") !== undefined,
+            ) ? (
+              <User name="User 4" confidence={88} />
+            ) : undefined}
           </Flex>
           <Text pt="12px" size="sm" className={classes.title}>
             Servers
@@ -128,6 +139,18 @@ function Server(props: { server: Server }) {
       <Popover.Dropdown style={{ pointerEvents: "none" }} w="340px">
         <Box className={classes.serverdetails}>
           <div className={classes.title}>
+            {" "}
+            <img
+              style={{ paddingRight: "4px" }}
+              src="./src/assets/icons/server.svg"
+              width="24px"
+            />{" "}
+            {props.server.hostname}
+          </div>
+          <div>Internal IP:{props.server.internalIP}</div>
+          <div>CPU: {props.server.usage_cpu} nCPU</div>
+          <div> Memory: {props.server.usage_memory / 1000}KiB</div>
+          <div className={classes.title}>
             <img
               style={{ paddingRight: "4px" }}
               src="./src/assets/icons/pod.svg"
@@ -144,7 +167,9 @@ function Server(props: { server: Server }) {
             )}
           </Flex>
         </Box>
-        <Box className={classes.serverdetails}>
+        {/*
+
+	<Box className={classes.serverdetails}>
           <div className={classes.title}>
             <img src="./src/assets/icons/alvarium.png" width="32px" />
             Annotations
@@ -154,6 +179,7 @@ function Server(props: { server: Server }) {
             <div>TPM=True</div>
           </Flex>
         </Box>
+*/}
       </Popover.Dropdown>
     </Popover>
   );
@@ -195,8 +221,8 @@ function User(props: { name: string; confidence: number }) {
             Annotations
           </div>
           <Flex direction="column">
-            <div>SecureBoot=True</div>
-            <div>TPM=True</div>
+            <div>SCA=True</div>
+            <div>Checksum=True</div>
           </Flex>
         </Box>
       </Popover.Dropdown>

@@ -36,7 +36,7 @@
     "stream": {
       "type": "kafka",
       "config": {
-        "bootstrap": "10.18.1.40:30093",
+        "bootstrap": "10.18.1.100:30093",
         "groupId": "foo",
         "topics": ["cpu_forecasts"]
       }

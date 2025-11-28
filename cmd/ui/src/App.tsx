@@ -1,7 +1,14 @@
 import "@mantine/core/styles.css";
 import classes from "./App.module.css";
 
-import { Box, Flex, Loader, MantineProvider, SimpleGrid } from "@mantine/core";
+import {
+  Box,
+  Flex,
+  Loader,
+  MantineProvider,
+  SimpleGrid,
+  Text,
+} from "@mantine/core";
 import { DKG } from "./components/dkg/dkg";
 import { Onboarding } from "./components/onboarding/onboarding";
 import { Scheduling } from "./components/scheduling/scheduling";
@@ -12,13 +19,11 @@ import type { Server } from "./api/dkg/dkg";
 
 function App() {
   const socketRef = useRef<any>(null);
-  const [updatedSchedulingData, setUpdatedSchedulingData] = useState<string[]>(
-    [],
-  );
+  const [updatedSchedulingData, setUpdatedSchedulingData] = useState<any[]>([]);
   const [updatedDltData, setUpdatedDltData] = useState<string[]>([]);
   const [updatedInfraData, setUpdatedInfraData] =
     useState<Map<string, Server[]>>();
-  const [schedulingData, setSchedulingData] = useState<string[]>([]);
+  const [schedulingData, setSchedulingData] = useState<any[]>([]);
   const [dltData, setDltData] = useState<string[]>([]);
   const [infraData, setInfraData] = useState<Map<string, Server[]>>();
   const [forecastData, setForecastData] =
@@ -44,6 +49,7 @@ function App() {
       console.log("message received");
       setLoading(false);
       const d = JSON.parse(event.data);
+      console.log(d);
       setUpdatedDltData(d.dlt);
       setUpdatedInfraData(d.infra);
       setUpdatedSchedulingData(d.scheduling);
@@ -72,8 +78,7 @@ function App() {
       setSchedulingData(updatedSchedulingData);
     } else {
       for (var i = 0; i < updatedSchedulingData.length; i++) {
-        if (updatedSchedulingData[i] !== schedulingData[i]) {
-          console.log(updatedSchedulingData[i], schedulingData[i]);
+        if (updatedSchedulingData[i].message != schedulingData[i].message) {
           setSchedulingData(updatedSchedulingData);
           break;
         }
@@ -93,6 +98,7 @@ function App() {
             <img src="./src/assets/logos/clever_icon.png" height="32px" />
             <img src="./src/assets/logos/clever_text.png" height="32px" />
           </div>
+          <Text size="xl">Smart Shopping</Text>
           <img src="./src/assets/logos/chipsju.png" height="38px" />
         </div>
       </header>
